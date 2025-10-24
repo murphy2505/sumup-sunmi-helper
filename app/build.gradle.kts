@@ -5,58 +5,59 @@ plugins {
 
 android {
     namespace = "com.scanfie.sumuphelper"
-    compileSdk = 34
+
+    // ✅ Veilig voor Sunmi D3 Pro (Android 11)
+    compileSdk = 30
 
     defaultConfig {
         applicationId = "com.scanfie.sumuphelper"
         minSdk = 24
-        targetSdk = 34          // ← eventueel tijdelijke fallback: 30
-        versionCode = 3
-        versionName = "0.1.1"
+        targetSdk = 30          // matcht Android 11 runtime
+        versionCode = 1
+        versionName = "1.0"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        debug { isMinifyEnabled = false }
+        debug {
+            isMinifyEnabled = false
+        }
         release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            isMinifyEnabled = false
+            // ProGuard kan later weer aan als alles stabiel draait
+            // proguardFiles(
+            //     getDefaultProguardFile("proguard-android-optimize.txt"),
+            //     "proguard-rules.pro"
+            // )
         }
     }
 
-    buildFeatures { compose = true }
-    composeOptions {
-        // compiler 1.5.14 ↔ Compose 1.6.x
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
+    // ✅ Java 11 voor maximale compat op Android 11 devices
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions { jvmTarget = "17" }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    // ❌ GEEN Compose hier; eerst boot fixen. Later voegen we dit terug:
+    // buildFeatures { compose = true }
+    // composeOptions { kotlinCompilerExtensionVersion = "1.5.14" }
 }
 
 dependencies {
-    // ✅ BOM gelocked zodat we NIET op 1.7.x komen
-    implementation(platform("androidx.compose:compose-bom:2024.02.00")) // ≈ Compose 1.6.2
-
-    implementation("androidx.activity:activity-compose:1.9.2")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-
-    // XML Material (mag blijven, schaadt niets)
+    // Basis AndroidX / Material
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
 
-    implementation("androidx.core:core-ktx:1.13.1")
+    // (Optioneel) lifecycle basis
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
 
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    // Tests (optioneel)
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }
