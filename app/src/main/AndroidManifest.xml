@@ -1,26 +1,16 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-  <application
-      android:label="SumUp Helper"
-      android:icon="@android:drawable/sym_def_app_icon"
-      android:theme="@style/AppTheme">
+package com.scanfie.sumuphelper
 
-    <activity android:name=".PayActivity" android:exported="true">
-      <!-- Custom scheme zodat Scanfie (web) ons kan openen -->
-      <intent-filter>
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="sumuphelper" android:host="pay" />
-      </intent-filter>
-    </activity>
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.Text
 
-    <activity android:name=".MainActivity" android:exported="true">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-
-  </application>
-</manifest>
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            Text("SumUp Helper gestart ✅")
+        }
+    }
+}
 
